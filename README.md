@@ -56,6 +56,16 @@ Run Quality Checks
 #### 4.3 Data dictionary 
 Create a data dictionary for your data model. For each field, provide a brief description of what the data is and where it came from. You can include the data dictionary in the notebook or in a separate file.
 
+The final list of columns on the processed dataframe is:
+* municipality: the municipality in which arrivals from brazil took place
+* lat: the latitude of the municipality
+* lon: the longitude of the municipality
+* count: the count of arrivals from brazil in an airport in said municipality
+
+a few other columns were also extremely important for joining tables and reaching that conclusion, such as:
+* i94port: the i94 port of entry for the unit of immigrant from the brazil in the provided i94 US National Tourism and Trade Office [dataset](https://travel.trade.gov/research/reports/i94/historical/2016.html).
+* iata_code: the provided airport codes from this [github](https://datahub.io/core/airport-codes#data)
+
 #### Step 5: Complete Project Write Up
 * Clearly state the rationale for the choice of tools and technologies for the project.
 * Propose how often the data should be updated and why.
