@@ -40,22 +40,22 @@ The data model is an inner join between a filtered dataset of arrivals, by the c
 
 #### 3.2 Mapping Out Data Pipelines
 The data is mapped utilizing spark and could be fed from redshift to a dash webpage live, meaning the data could be increased 100x, the pipelines could be run on a daily basis by 7 am every day (or ran every second), and the database could be accessed in redshift by 100+ people.
+As it is the data is being downloaded from amazon S3, one of the files is a sas file that is downloaded, converted to csv and reuploaded, and the other file is already a csv in s3. Both are then copied to redshift, and then read from redshift and processed into a visual presentation through pandas.
 
 ### Step 4: Run Pipelines to Model the Data 
 #### 4.1 Create the data model
-Build the data pipelines to create the data model.
+![Model](datamap.png "Model")
 
 #### 4.2 Data Quality Checks
-Explain the data quality checks you'll perform to ensure the pipeline ran as expected. These could include:
- * Integrity constraints on the relational database (e.g., unique key, data type, etc.)
- * Unit tests for the scripts to ensure they are doing the right thing
- * Source/Count checks to ensure completeness
+Ran data quality checks on the sql tables to make sure the data was ok.
+Ran checks on tables:
+ * staging_i94
+ * staging_airport
+ * braziliansinairports
  
 Run Quality Checks
 
-#### 4.3 Data dictionary 
-Create a data dictionary for your data model. For each field, provide a brief description of what the data is and where it came from. You can include the data dictionary in the notebook or in a separate file.
-
+#### 4.3 Data dictionary
 The final list of columns on the processed dataframe is:
 * municipality: the municipality in which arrivals from brazil took place
 * lat: the latitude of the municipality
@@ -67,9 +67,9 @@ a few other columns were also extremely important for joining tables and reachin
 * iata_code: the provided airport codes from this [github](https://datahub.io/core/airport-codes#data)
 
 #### Step 5: Complete Project Write Up
-* Clearly state the rationale for the choice of tools and technologies for the project.
-* Propose how often the data should be updated and why.
-* Write a description of how you would approach the problem differently under the following scenarios:
+* Spark, s3, pandas, boto were chosen in order to create an ETL pipeline from any given sas file on s3, process it and generate a real time study on brazilians in american airports for business reasons, one might want to set up electronics and other high tax goods stores in areas where there are lots of brazilians in airports and such a real time pipeline could constantly keep prospective businessmen informed.
+* Considering the sas data was divided on a monthly basis, once a month updating the file should be optimal.
+* The pipeline wouldn'
  * The data was increased by 100x.
  * The data populates a dashboard that must be updated on a daily basis by 7am every day.
  * The database needed to be accessed by 100+ people.

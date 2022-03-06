@@ -70,8 +70,8 @@ staging_airport_table_create = ("""
 braziliansinairports_table_create = ("""
     CREATE TABLE IF NOT EXISTS braziliansinairports (
                 municipality    VARCHAR             NOT NULL,
-                lat             NUMERIC             NOT NULL DISTKEY SORTKEY,
-                lon             NUMERIC             NOT NULL,
+                lat             VARCHAR             NOT NULL DISTKEY SORTKEY,
+                lon             VARCHAR             NOT NULL,
                 count           INTEGER             NOT NULL
     );
 """)
@@ -84,19 +84,20 @@ FROM 's3://astrogildopereirajunior/airport-codes_csv.csv'
 credentials 'aws_iam_role={}'
 csv;""".format(config.get('IAM_ROLE', 'ARN'))
 
-staging_i94_copy = ("""
+staging_i94_copy = """
     COPY staging_i94
-    FROM 'sas_data/'
-    FORMAT AS PARQUET;
-""")
+    FROM 's3://astrogildopereirajunior/staging_i94.csv'
+    credentials 'aws_iam_role={}'
+    csv;
+""".format(config.get('IAM_ROLE', 'ARN'))
 
 # FINAL TABLES
 braziliansinairports_table_insert("""
     INSERT INTO braziliansinairports(
                 i94ports      as airport
                 municipality    VARCHAR,
-                lat             NUMERIC,
-                lon             NUMERIC,
+                lat             VARCHAR,
+                lon             VARCHAR,
                 count           INTEGER,
     )
     SELECT i.i94ports,a.municipality, a.coordinates, a.iata_code,count(*) 
