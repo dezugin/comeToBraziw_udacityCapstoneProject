@@ -81,12 +81,17 @@ def process_tables(cur, conn):
     df['lat'] = new[1]
     df['lon'] = new[0]
     df = df.groupby(['municipality', 'lat','lon']).size().to_frame(name = 'count').reset_index()
+    df.to_csv("braziliansinairports.csv",index=False)
+    upload_file('braziliansinairports.csv','astrogildopereirajunior')
+    cur = conn.cursor()
     query = """
-    INSERT into braziliansinairports(municipality, lat, lon, count) values('%s','%s','%s',%s);
-    """ % (df['municipality'], df['lat'], df['lon'],df['count'])
+        COPY braziliansinairports
+        FROM 's3://astrogildopereirajunior/braziliansinairports.csv'
+        credentials 'aws_iam_role={}'
+        csv;
+    """.format(config.get('IAM_ROLE', 'ARN'))
     cur.execute(query)
     conn.commit()
-    
 def main():
     """Connecting to database and inserting json data into tables, then inserting tables into star schemed analytic tables 
     """

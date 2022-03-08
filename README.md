@@ -42,8 +42,8 @@ The data model is an inner join between a filtered dataset of arrivals, by the c
 The data is mapped utilizing spark and could be fed from redshift to a dash webpage live, meaning the data could be increased 100x, the pipelines could be run on a daily basis by 7 am every day (or ran every second), and the database could be accessed in redshift by 100+ people.
 As it is the data is being downloaded from amazon S3, one of the files is a sas file that is downloaded, converted to csv and reuploaded, and the other file is already a csv in s3. Both are then copied to redshift, and then read from redshift and processed into a visual presentation through pandas.
 
-### Step 4: Run Pipelines to Model the Data 
-#### 4.1 Create the data model
+### Step 4: Pipelines to Model the Data 
+#### 4.1 Data model
 ![Model](datamap.png "Model")
 
 #### 4.2 Data Quality Checks
@@ -52,8 +52,8 @@ Ran checks on tables:
  * staging_i94
  * staging_airport
  * braziliansinairports
+ Making sure strategic columns were not null and counted the full row number of all tables.
  
-Run Quality Checks
 
 #### 4.3 Data dictionary
 The final list of columns on the processed dataframe is:
@@ -67,9 +67,13 @@ a few other columns were also extremely important for joining tables and reachin
 * iata_code: the provided airport codes from this [github](https://datahub.io/core/airport-codes#data)
 
 #### Step 5: Complete Project Write Up
-* Spark, s3, pandas, boto were chosen in order to create an ETL pipeline from any given sas file on s3, process it and generate a real time study on brazilians in american airports for business reasons, one might want to set up electronics and other high tax goods stores in areas where there are lots of brazilians in airports and such a real time pipeline could constantly keep prospective businessmen informed.
+* Spark, s3, pandas, boto, redshift were chosen in order to create an ETL pipeline from any given sas file on s3, process it and generate a real time study on brazilians in american airports for business reasons, one might want to set up electronics and other high tax goods stores in areas where there are lots of brazilians in airports and such a real time pipeline could constantly keep prospective businessmen informed. Spark was chosen because it provides a faster and more general data processing platform. Spark lets you run programs up to 100x faster in memory, or 10x faster on disk, than other Hadoop. It provides an interface for cluster programming with parallelism and fault tolerance as well, so it is a good choice if we scale up the project. Amazon s3 was chosen for similar reasons, it is a cheap, reliable way to scale up the amount of data used. Pandas is a very fast data processing library, with its vectorizing capabilities. Boto was chosen because it lets you write scripts that manage complex setups in AWS, and redshift was utilized  because of its ability to handle huge volumes of data — capable of processing structured and unstructured data in the range of exabytes (1018 bytes).
 * Considering the sas data was divided on a monthly basis, once a month updating the file should be optimal.
-* The pipeline wouldn'
+* The pipeline wouldn't run into issues if:
  * The data was increased by 100x.
  * The data populates a dashboard that must be updated on a daily basis by 7am every day.
  * The database needed to be accessed by 100+ people.
+
+#### Rereferences:
+code for uploading to s3 through python inspired in code from: https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-uploading-files.html
+
